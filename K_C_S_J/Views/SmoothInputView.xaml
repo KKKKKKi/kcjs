@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="K_C_S_J.Views.SmoothInputView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:v="clr-namespace:K_C_S_J.Views"
+             mc:Ignorable="d" 
+             Padding="10"
+             d:DesignWidth="300"
+             d:DesignHeight="300">
+
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10 4">
+                <TextBlock Text="起始点：" 
+                           FontSize="16"
+                           Width="80"
+                           VerticalAlignment="Center"/>
+                <TextBox x:Name="StartIndex" Width="120" 
+                         Text="{Binding StartIndex}"
+                         VerticalContentAlignment="Center" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10 4">
+                <TextBlock Text="终止点："
+                           FontSize="16"
+                           Width="80"
+                           VerticalAlignment="Center" />
+                <TextBox x:Name="EndIndex" Width="120"
+                         Text="{Binding EndIndex}"
+                         VerticalContentAlignment="Center" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10 4">
+                <TextBlock Text="光滑点数：" 
+                           FontSize="16"
+                           Width="80"
+                           VerticalAlignment="Center" />
+                <ComboBox x:Name="Opts" Width="120"
+                          ItemsSource="{Binding Opts, Mode=OneWay}"
+                          SelectedItem="{Binding SelectedOpt}" />
+            </StackPanel>
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        IsDefault="True"
+                        Content="OK"
+                        Width="90"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Style="{DynamicResource MaterialDesignFlatButton}"
+                        Command="{x:Static material:DialogHost.CloseDialogCommand}"
+                        cal:Message.Attach="[Event Click]=[Action SendOpts]">
+                    <Button.CommandParameter>
+                        <sys:Boolean>True</sys:Boolean>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Grid.Column="1"
+                        IsCancel="True"
+                        Content="Cancel"
+                        Width="90"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Style="{DynamicResource MaterialDesignFlatButton}"
+                        Command="{x:Static material:DialogHost.CloseDialogCommand}">
+                    <Button.CommandParameter>
+                        <sys:Boolean>False</sys:Boolean>
+                    </Button.CommandParameter>
+                </Button>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>
