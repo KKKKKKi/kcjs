@@ -87,6 +87,8 @@
                         </oxy:PlotView.ZoomRectangleTemplate>
                         <oxy:PlotView.ContextMenu>
                             <ContextMenu>
+                                <MenuItem Header="原始谱线" IsCheckable="True" IsChecked="{Binding IsOrgDataVisible}" />
+                                <Separator />
                             </ContextMenu>
                         </oxy:PlotView.ContextMenu>
                     </oxy:PlotView>

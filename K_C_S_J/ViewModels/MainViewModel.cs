@@ -42,7 +42,28 @@
         /// <summary>
         /// 当前的谱数据
         /// </summary>
-        private List<DataPoint> _points;
+        private List<DataPoint> _org, _points;
+
+        private bool _isOrgDataVisible = true;
+
+        public bool IsOrgDataVisible
+        {
+            get => _isOrgDataVisible;
+            set
+            {
+                if (Set(ref _isOrgDataVisible, value))
+                {
+                    if (value)
+                    {
+                        InsertSeriesIntoPlotModel(0, _orgSeries);
+                    }
+                    else
+                    {
+                        RemoveSeriesFromPlotModel(_orgSeries);
+                    }
+                }
+            }
+        }
 
         #endregion
 
@@ -51,7 +72,6 @@
         public void ReadPu12()
         {
             RemoveAllSeriesFromPlotModel();
-            _pAreaSeries.Clear();
 
             try
             {
@@ -72,7 +92,9 @@
                     }
                 }
                 SetPlotModelTitle("12.pu");
-                SetSeriesTitle("12");
+                SetSeriesTitle(_orgSeries, "12");
+                AddSeriesToPlotModel(_orgSeries);
+                _plotModel.InvalidatePlot(true);
             }
             catch (Exception error)
             {
@@ -84,7 +106,6 @@
         public void ReadPu28()
         {
             RemoveAllSeriesFromPlotModel();
-            _pAreaSeries.Clear();
 
             try
             {
@@ -105,7 +126,9 @@
                     }
                 }
                 SetPlotModelTitle("28.pu");
-                SetSeriesTitle("28");
+                SetSeriesTitle(_orgSeries, "28");
+                AddSeriesToPlotModel(_orgSeries);
+                _plotModel.InvalidatePlot(true);
             }
             catch (Exception error)
             {
@@ -118,7 +141,6 @@
         public void ReadMCA()
         {
             RemoveAllSeriesFromPlotModel();
-            _pAreaSeries.Clear();
 
             try
             {
@@ -137,7 +159,9 @@
                     }
                 }
                 SetPlotModelTitle("Gss5-6.mca");
-                SetSeriesTitle("Gss5-6");
+                SetSeriesTitle(_orgSeries, "Gss5-6");
+                AddSeriesToPlotModel(_orgSeries);
+                _plotModel.InvalidatePlot(true);
             }
             catch (Exception error)
             {
@@ -207,6 +231,14 @@
 
         private LinearAxis _channelAxis, _countAxis;
 
+        private readonly LineSeries _orgSeries = new LineSeries()
+        {
+            Color = OxyColors.Transparent,
+            MarkerType = MarkerType.Circle,
+            MarkerFill = OxyColors.Gray,
+            MarkerSize = 2,
+        };
+
         private readonly LineSeries _lineSeries = new LineSeries()
         {
             Color = OxyColors.Transparent,
@@ -235,7 +267,8 @@
             };
             _plotModel.Axes.Add(_channelAxis);
             _plotModel.Axes.Add(_countAxis);
-            AddSeriesToPlotModel(_lineSeries);
+            // AddSeriesToPlotModel(_orgSeries);
+            // AddSeriesToPlotModel(_lineSeries);
         }
 
         private void InitController()
@@ -279,9 +312,9 @@
         /// 设置Series标题
         /// </summary>
         /// <param name="title">标题</param>
-        public void SetSeriesTitle(string title)
+        public void SetSeriesTitle(Series series, string title)
         {
-            _lineSeries.Title = title;
+            series.Title = title;
         }
 
         public void SetAsixRange(int min, int max)
@@ -303,11 +336,14 @@
 
         private void AddDataToSeries(List<DataPoint> points)
         {
+            _org = points;
             _points = points;
-            _lineSeries.Points.Clear();
-            _lineSeries.Points.AddRange(_points);
+            _orgSeries.Points.Clear();
+            _orgSeries.Points.AddRange(_points);
+            // _lineSeries.Points.Clear();
+            // _lineSeries.Points.AddRange(_points);
             SetAsixRange(-1, _points.Count);
-            _plotModel.InvalidatePlot(true);
+            // _plotModel.InvalidatePlot(true);
         }
 
         /// <summary>
@@ -316,7 +352,21 @@
         /// <param name="series">Series</param>
         private void AddSeriesToPlotModel(Series series)
         {
+            if (_plotModel.Series.Contains(series))
+            {
+                return;
+            }
             _plotModel.Series.Add(series);
+            _plotModel.InvalidatePlot(true);
+        }
+
+        private void InsertSeriesIntoPlotModel(int index, Series series)
+        {
+            if (_plotModel.Series.Contains(series))
+            {
+                return;
+            }
+            _plotModel.Series.Insert(index, series);
             _plotModel.InvalidatePlot(true);
         }
 
@@ -330,6 +380,7 @@
             if (_plotModel.Series.Contains(series))
             {
                 _plotModel.Series.Remove(series);
+                _plotModel.InvalidatePlot(true);
             }
         }
 
@@ -364,8 +415,8 @@
         private void RemoveAllSeriesFromPlotModel()
         {
             _plotModel.Series.Clear();
-            _plotModel.Series.Add(_lineSeries);
-            _plotModel.InvalidatePlot(true);
+            // _plotModel.Series.Add(_orgSeries);
+            // _plotModel.InvalidatePlot(true);
         }
 
         public void SaveModelAs(int width = 1280, int height = 720)
@@ -412,6 +463,9 @@
             }
             _lineSeries.Points.Clear();
             _lineSeries.Points.AddRange(_points);
+            // 添加光滑后的谱线
+            SetSeriesTitle(_lineSeries, "光滑后的谱线");
+            _plotModel.Series.Add(_lineSeries);
             _plotModel.InvalidatePlot(true);
         }
 
@@ -550,6 +604,7 @@
         public void Handle(PeakOpts message)
         {
             // RemoveAllSeriesFromPlotModel();
+            // AddSeriesToPlotModel(_lineSeries);
             Peaks(message.StartIndex, message.EndIndex, message.NumH, message.Numm, message.NumR);
             // _pAreaSeries.Clear();
             // AddPeaksToPlotModel();
