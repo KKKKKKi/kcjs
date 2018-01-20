@@ -261,9 +261,9 @@
             {
                 Position = AxisPosition.Left,
                 Title = "Count",
-                // AbsoluteMinimum = 0,
-                // IsZoomEnabled = false,
-                // IsPanEnabled = false,
+                AbsoluteMinimum = 0,
+                IsZoomEnabled = false,
+                IsPanEnabled = false,
             };
             _plotModel.Axes.Add(_channelAxis);
             _plotModel.Axes.Add(_countAxis);
@@ -603,11 +603,12 @@
 
         public void Handle(PeakOpts message)
         {
-            // RemoveAllSeriesFromPlotModel();
-            // AddSeriesToPlotModel(_lineSeries);
+            RemoveAllSeriesFromPlotModel();
+            AddSeriesToPlotModel(_lineSeries);
+            _peaks.Clear();
             Peaks(message.StartIndex, message.EndIndex, message.NumH, message.Numm, message.NumR);
-            // _pAreaSeries.Clear();
-            // AddPeaksToPlotModel();
+            _pAreaSeries.Clear();
+            AddPeaksToPlotModel();
             //
         }
 
@@ -641,7 +642,7 @@
             {
                 d = _points[i + j].Y;
                 g = Gj(i, j, m);
-                c = Gauss(j, h);
+                c = Cj(j, h);
 
                 G += g;
                 gxC += g * c;
@@ -704,7 +705,7 @@
                 ris[i - startIndex] = ri;
             }
 
-            //* 用于显示对应的Ri曲线，仅供调试使用，编译时应当注释掉
+            /* 用于显示对应的Ri曲线，仅供调试使用，编译时应当注释掉
             List<DataPoint> lRi = new List<DataPoint>();
             for (int i = 0; i < ris.Length; i++)
             {

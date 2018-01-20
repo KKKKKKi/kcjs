@@ -44,7 +44,6 @@
                             <StackPanel>
                                 <Button Content="Gss5-6.mca" cal:Message.Attach="[Event Click]=[Action ReadMCA]" />
                                 <Button Content="12.pu" cal:Message.Attach="ReadPu12" />
-                                <Button Content="28.pu" cal:Message.Attach="ReadPu28" />
                                 <Button Content="Can't Touch This" IsEnabled="False" />
                                 <Separator/>
                                 <Button Content="另存文件..." cal:Message.Attach="SaveAs" />
@@ -97,15 +96,7 @@
                                        VerticalAlignment="Bottom"
                                        Margin="0 0 18 60" Grid.Row="1">
                         <StackPanel>
-                            <Button ToolTip="GitHub">
-                                <material:PackIcon Kind="GithubCircle" Height="20" Width="20" />
-                            </Button>
-                            <Button ToolTip="Twitter"
-                                    Background="{DynamicResource PrimaryHueMidBrush}"
-                                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}">
-                                <material:PackIcon Kind="Twitter" />
-                            </Button>
-                            <Button ToolTip="Chat" cal:Message.Attach="SaveModelAs(1280, 720)">
+                            <Button ToolTip="Save" cal:Message.Attach="SaveModelAs(1280, 720)">
                                 <!-- mix up the colours by brinking in a named palette (see merged dictionaries at top) -->
                                 <Button.Background>
                                     <SolidColorBrush Color="{StaticResource GreenPrimary500}" />
@@ -113,7 +104,7 @@
                                 <Button.Foreground>
                                     <SolidColorBrush Color="{StaticResource GreenPrimary500Foreground}" />
                                 </Button.Foreground>
-                                <material:PackIcon Kind="Message" />
+                                <material:PackIcon Kind="ContentSave" />
                             </Button>
                             <Button ToolTip="Target"
                                     cal:Message.Attach="ShowPeakDialog"

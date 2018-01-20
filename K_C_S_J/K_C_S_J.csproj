@@ -130,9 +130,6 @@
     <None Include="Files\12.pu">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Files\28.pu">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Files\Gss5-6.mca">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
