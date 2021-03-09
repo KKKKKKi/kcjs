@@ -50,10 +50,7 @@
                                 <Button Content="Hello World" cal:Message.Attach="ShowPopup($source)" />
                             </StackPanel>
                         </material:PopupBox>
-                        <TextBlock Text="Material Design In XAML Toolkit" 
-                                   HorizontalAlignment="Center" 
-                                   VerticalAlignment="Center" 
-                                   FontSize="22" />
+                        <TextBlock />
                     </DockPanel>
                 </material:ColorZone>
                 <Grid>
